@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Jiao - just do it">
 <meta property="og:description" content="原文链接：https://www.cnblogs.com/2050/p/3877280.html dpr  在css中我们一般使用px作为单位，在桌面浏览器中css的1个像素往往都是对应着电脑屏幕的1个物理像素，这可能会造成我们的一个错觉，那就是css中的像素就是设备的物理像素。但实际情况却并非如此，css中的像素只是一个抽象的单位，在不同的设备或不同的环境中，css中的1px所代表的设备物理">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-23T09:03:22.124Z">
+<meta property="og:updated_time" content="2019-01-23T09:09:13.472Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="移动端布局适配问题---viewport的理解">
 <meta name="twitter:description" content="原文链接：https://www.cnblogs.com/2050/p/3877280.html dpr  在css中我们一般使用px作为单位，在桌面浏览器中css的1个像素往往都是对应着电脑屏幕的1个物理像素，这可能会造成我们的一个错觉，那就是css中的像素就是设备的物理像素。但实际情况却并非如此，css中的像素只是一个抽象的单位，在不同的设备或不同的环境中，css中的1px所代表的设备物理">
@@ -190,7 +190,17 @@
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>首先如果不设置meta viewport标签，那么移动设备上浏览器默认的宽度值为800px，980px，1024px等这些，总之是大于屏幕宽度的。这里的宽度所用的单位px都是指css中的px，它跟代表实际屏幕物理像素的px不是一回事。</p>
 <p>第二、每个移动设备浏览器中都有一个理想的宽度，这个理想的宽度是指css中的宽度，跟设备的物理宽度没有关系，在css中，这个宽度就相当于100%的所代表的那个宽度。我们可以用meta标签把viewport的宽度设为那个理想的宽度，如果不知道这个设备的理想宽度是多少，那么用device-width这个特殊值就行了，同时initial-scale=1也有把viewport的宽度设为理想宽度的作用。所以，我们可以使用</p>
 <p><code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;</code><br>来得到一个理想的viewport（也就是前面说的ideal viewport）。<br>为什么需要有理想的viewport呢？比如一个分辨率为320x480的手机理想viewport的宽度是320px，而另一个屏幕尺寸相同但分辨率为640x960的手机的理想viewport宽度也是为320px，那为什么分辨率大的这个手机的理想宽度要跟分辨率小的那个手机的理想宽度一样呢？这是因为，只有这样才能保证同样的网站在不同分辨率的设备上看起来都是一样或差不多的。实际上，现在市面上虽然有那么多不同种类不同品牌不同分辨率的手机，但它们的理想viewport宽度归纳起来无非也就 320、360、384、400等几种，都是非常接近的，理想宽度的相近也就意味着我们针对某个设备的理想viewport而做出的网站，在其他设备上的表现也不会相差非常多甚至是表现一样的</p>
-<h3 id="实际开发小结"><a href="#实际开发小结" class="headerlink" title="实际开发小结"></a>实际开发小结</h3><p>适配不同屏幕宽度以及不同dpr，通过动态设置viewport(scale=1/dpr) + 根元素fontSize + rem, 辅助使用vw/vh等来达到适合的显示；<br>若无需适配可显示1px线条，也可以不动态设置scale，只使用动态设置根元素fontSize + rem + 理想视口；<br>当视口缩放，计算所得的根元素fontSize也会跟着缩放，即若理想视口(scale=1), iPhone6根元素fontSize=16px; 若scale=0.5, iPhone6根元素fontSize=32px; 因此不必担心rem的计算；<br>!!css单位：以前我认为这样比较好：适配元素rem为单位，正文字体及边距宜用px为单位；现在认为全部用rem即可，包括字体大小，不用px；<br>px为单位的元素，需根据dpr有不同的大小，如大小12px, dpr=2则采用24px, 使用sass mixin简化写法；<br>配合scss函数，简化px2rem转换，且易于维护(若需修改$base-font-size, 无需手动重新计算所有rem单位)；<br>px2rem函数的$base-font-size只跟根元素fontSize的基准（此文中是【fontSize=16px when 375】）以及设计图的大小有关，按此基准，若设计图为iPhone6二倍稿，则$base-font-size=32px，参数传值直接为设计图标注尺寸；<br>使用iPhone6(375pt)二倍设计图:宽度750px；<br>切图使用三倍精度图，以适应三倍屏（这个目前我还没有实际应用过）</p>
+<h3 id="实际开发小结"><a href="#实际开发小结" class="headerlink" title="实际开发小结"></a>实际开发小结</h3><ul>
+<li>适配不同屏幕宽度以及不同dpr，通过动态设置viewport(scale=1/dpr) + 根元素fontSize + rem, 辅助使用vw/vh等来达到适合的显示；</li>
+<li>若无需适配可显示1px线条，也可以不动态设置scale，只使用动态设置根元素fontSize + rem + 理想视口；</li>
+<li>当视口缩放，计算所得的根元素fontSize也会跟着缩放，即若理想视口(scale=1), iPhone6根元素fontSize=16px; 若scale=0.5, iPhone6根元素fontSize=32px; 因此不必担心rem的计算；</li>
+<li>!!css单位：以前我认为这样比较好：适配元素rem为单位，正文字体及边距宜用px为单位；现在认为全部用rem即可，包括字体大小，不用px；</li>
+<li>px为单位的元素，需根据dpr有不同的大小，如大小12px, dpr=2则采用24px, 使用sass mixin简化写法；</li>
+<li>配合scss函数，简化px2rem转换，且易于维护(若需修改$base-font-size, 无需手动重新计算所有rem单位)；</li>
+<li>px2rem函数的$base-font-size只跟根元素fontSize的基准（此文中是【fontSize=16px when 375】）以及设计图的大小有关，按此基准，若设计图为iPhone6二倍稿，则$base-font-size=32px，参数传值直接为设计图标注尺寸；</li>
+<li>使用iPhone6(375pt)二倍设计图:宽度750px；</li>
+<li>切图使用三倍精度图，以适应三倍屏（这个目前我还没有实际应用过）</li>
+</ul>
 
       
 
