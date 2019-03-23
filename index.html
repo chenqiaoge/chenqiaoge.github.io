@@ -160,6 +160,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-js-跨域" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/js-跨域/">js 跨域</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/js-跨域/" class="archive-article-date">
+  	<time datetime="2019-03-23T01:34:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>跨域：指协议、域名、端口号有一个不同就是跨域；跨域ajax请求会被浏览器拦截，因为浏览器出于安全（为了防止CSRF攻击）考虑，有的同源（协议、域名、端口号）策略；</p>
+<p>常见的解决方式：<br>1.JSONP （src不受同源策略限制）<br>  利用script标签指向一个需要访问的地址，并提供一个回调函数来接收数据（当需要通讯时）<br>  <figure class="highlight plain"><figcaption><span>src</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    function jsonp(data) &#123;</span><br><span class="line">      console.log(data)</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>  JSONP 使用简单且兼容性不错，但是只限于get请求；</p>
+<p>2、CORS   需要浏览器和后端同时支持，ie8  9 需要通过XDomainRequest来实现；<br> 主要是厚度那配置，Access-Control-Allow-Origin：可以访问的域名<br> 有两种情况：简单请求和复杂请求；<br> 1&gt;  简单请求：以ajax为例，满足以下条件时，会触发简单请求：<br> 使用GET、HEAD、POST，content-Type的值仅限于下列三者之一：text/plain,multipart/form-data,application/x-www-form-urlencoded;</p>
+<p> 复杂请求：<br> 不符合以上条件的请求就肯定是复杂请求了，<br>  对于复杂请求来说，首先会发起一个预检请求，该请求是 option 方法的，通过该请求来知道服务端是否允许跨域请求<br>  3、document.domain<br>  该方式只能用于二级域名相同的情况下，比如 a.test.com 和 b.test.com 适用于该方式。</p>
+<p>  只需要给页面添加 document.domain = ‘test.com’ 表示二级域名都相同就可以实现跨域4、postMessage<br>  这种方式通常用于获取嵌入页面中的第三方页面数据。一个页面发送消息，另一个页面判断来源并接收消息<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 发送消息端</span><br><span class="line">window.parent.postMessage(&apos;message&apos;, &apos;http://test.com&apos;)</span><br><span class="line">// 接收消息端</span><br><span class="line">var mc = new MessageChannel()</span><br><span class="line">mc.addEventListener(&apos;message&apos;, event =&gt; &#123;</span><br><span class="line">  var origin = event.origin || event.originalEvent.origin</span><br><span class="line">  if (origin === &apos;http://test.com&apos;) &#123;</span><br><span class="line">    console.log(&apos;验证通过&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>  5、nginx 代理</p>
+<p>浏览器缓存：<br>  缓存位置：从缓存位置上来说分为四种，并且各自有优先级，当依次查找缓存且都没有命中的时候，才会去请求网络</p>
+<pre><code>Service Worker
+Memory Cache  内存
+Disk Cache    硬盘
+Push Cache    http2的服务端推送
+网络请求
+</code></pre><p>  缓存策略：强缓存和协商缓存，是通过设置HTTP Header （response Header）来实现的，服务端设置；<br>  强缓存可以通过设置两种HTTP Header实现：Expires 和 Cache-Control，表示在缓存期间不需要请求，state code 为200；<br>    Expires: Wed, 22 Oct 2018 08:41:00 GMT<br>    Expires 是 HTTP/1 的产物，表示资源会在 Wed, 22 Oct 2018 08:41:00 GMT 后过期，需要再次请求。并且 Expires 受限于本地时间，如果修改了本地时间，可能会造成缓存失效<br>    Cache-control: max-age=30<br>    Cache-Control 出现于 HTTP/1.1，优先级高于 Expires 。该属性值表示资源会在 30 秒后过期，需要再次请求。</p>
+<pre><code>Cache-Control 可以在请求头或者响应头中设置，并且可以组合使用多种指令（public  private max-age = 30  no-store no-cache max-stale=30 min-fresh=30 ）
+</code></pre><p>  协商缓存<br>    如果缓存过期了，就需要发起请求验证资源是否有更新。协商缓存可以通过设置两种 HTTP Header 实现：Last-Modified 和 ETag 。</p>
+<pre><code>当浏览器发起请求验证资源时，如果资源没有做改变，那么服务端就会返回 304 状态码，并且更新浏览器缓存有效期。
+</code></pre><p>  实际场景应用缓存策略<br>单纯了解理论而不付诸于实践是没有意义的，接下来我们来通过几个场景学习下如何使用这些理论。</p>
+<p>频繁变动的资源<br>对于频繁变动的资源，首先需要使用 Cache-Control: no-cache 使浏览器每次都请求服务器，然后配合 ETag 或者 Last-Modified 来验证资源是否有效。这样的做法虽然不能节省请求数量，但是能显著减少响应数据大小。<br>代码文件<br>这里特指除了 HTML 外的代码文件，因为 HTML 文件一般不缓存或者缓存时间很短。</p>
+<p>一般来说，现在都会使用工具来打包代码，那么我们就可以对文件名进行哈希处理，只有当代码修改后才会生成新的文件名。基于此，我们就可以给代码文件设置缓存有效期一年 Cache-Control: max-age=31536000，这样只有当 HTML 文件中引入的文件名发生了改变才会去下载最新的代码文件，否则就一直使用缓存。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/js-跨域/">展开全部 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-js-数组" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -182,6 +264,9 @@
       
         <p>js数组常用遍历方法小结：<br>  for  性能最好<br> es5新增，参数都为两个（fn匿名函数，[window]）  forEach（始终返回undefined）   map（返回整个新数组）  filter（返回符合条件的新数组）  every（返回布尔值，是否全部符合）  some（返回布尔值，是否有符合的） </p>
 <p> reduce() —让数组中的前项和后项做某种计算，并累计最终值</p>
+<p> 易混淆方法小结：<br> slice(i,[j]);Array和String对象都有，截取字符串/数组；<br>    返回索引值i到j的数组或字符串（前闭后开），原对象不变；<br> splice(i,deleteNum,[add1],[addx]);数组Array的方法，向数组中 添加/删除 项目，会返回被删项目，（可用于获取数组片段），会改变原数组；</p>
+<p>  split(speator,[howmany]);字符串分隔成数组，与join()效果相反；<br>  substring(start,stop);截取字符串<br>  substr(start,length);截取字符串</p>
+<p>  判断数组类型方法：<br>  1、ES5: Array.isArray(obj)  ;<br>  2、obj instanceof Array   ;<br>  3、Obiect.prototype.toString.call(obj)<br>    Object.prototype.toString.call(obj1) == ‘[object Array]’;</p>
 <p>参考链接：<a href="https://www.jianshu.com/p/fa212e29c7bf" target="_blank" rel="noopener">https://www.jianshu.com/p/fa212e29c7bf</a></p>
 
       

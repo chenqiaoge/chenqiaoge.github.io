@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="https://chenqiaoge.github.io">
   <title>js 数组 | Jiao - just do it</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="js数组常用遍历方法小结：  for  性能最好 es5新增，参数都为两个（fn匿名函数，[window]）  forEach（始终返回undefined）   map（返回整个新数组）  filter（返回符合条件的新数组）  every（返回布尔值，是否全部符合）  some（返回布尔值，是否有符合的）   reduce() —让数组中的前项和后项做某种计算，并累计最终值 参考链接：https">
+  <meta name="description" content="js数组常用遍历方法小结：  for  性能最好 es5新增，参数都为两个（fn匿名函数，[window]）  forEach（始终返回undefined）   map（返回整个新数组）  filter（返回符合条件的新数组）  every（返回布尔值，是否全部符合）  some（返回布尔值，是否有符合的）   reduce() —让数组中的前项和后项做某种计算，并累计最终值  易混淆方法小结：">
 <meta name="keywords" content="“前端,js,jquery,javascript,html5,开发者,程序猿”">
 <meta property="og:type" content="article">
 <meta property="og:title" content="js 数组">
 <meta property="og:url" content="https://chenqiaoge.github.io/2019/03/js-数组/index.html">
 <meta property="og:site_name" content="Jiao - just do it">
-<meta property="og:description" content="js数组常用遍历方法小结：  for  性能最好 es5新增，参数都为两个（fn匿名函数，[window]）  forEach（始终返回undefined）   map（返回整个新数组）  filter（返回符合条件的新数组）  every（返回布尔值，是否全部符合）  some（返回布尔值，是否有符合的）   reduce() —让数组中的前项和后项做某种计算，并累计最终值 参考链接：https">
+<meta property="og:description" content="js数组常用遍历方法小结：  for  性能最好 es5新增，参数都为两个（fn匿名函数，[window]）  forEach（始终返回undefined）   map（返回整个新数组）  filter（返回符合条件的新数组）  every（返回布尔值，是否全部符合）  some（返回布尔值，是否有符合的）   reduce() —让数组中的前项和后项做某种计算，并累计最终值  易混淆方法小结：">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-23T00:31:02.638Z">
+<meta property="og:updated_time" content="2019-03-23T04:03:23.257Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js 数组">
-<meta name="twitter:description" content="js数组常用遍历方法小结：  for  性能最好 es5新增，参数都为两个（fn匿名函数，[window]）  forEach（始终返回undefined）   map（返回整个新数组）  filter（返回符合条件的新数组）  every（返回布尔值，是否全部符合）  some（返回布尔值，是否有符合的）   reduce() —让数组中的前项和后项做某种计算，并累计最终值 参考链接：https">
+<meta name="twitter:description" content="js数组常用遍历方法小结：  for  性能最好 es5新增，参数都为两个（fn匿名函数，[window]）  forEach（始终返回undefined）   map（返回整个新数组）  filter（返回符合条件的新数组）  every（返回布尔值，是否全部符合）  some（返回布尔值，是否有符合的）   reduce() —让数组中的前项和后项做某种计算，并累计最终值  易混淆方法小结：">
   
     <link rel="alternative" href="/404/" title="Jiao - just do it" type="application/atom+xml">
   
@@ -181,6 +181,9 @@
       
         <p>js数组常用遍历方法小结：<br>  for  性能最好<br> es5新增，参数都为两个（fn匿名函数，[window]）  forEach（始终返回undefined）   map（返回整个新数组）  filter（返回符合条件的新数组）  every（返回布尔值，是否全部符合）  some（返回布尔值，是否有符合的） </p>
 <p> reduce() —让数组中的前项和后项做某种计算，并累计最终值</p>
+<p> 易混淆方法小结：<br> slice(i,[j]);Array和String对象都有，截取字符串/数组；<br>    返回索引值i到j的数组或字符串（前闭后开），原对象不变；<br> splice(i,deleteNum,[add1],[addx]);数组Array的方法，向数组中 添加/删除 项目，会返回被删项目，（可用于获取数组片段），会改变原数组；</p>
+<p>  split(speator,[howmany]);字符串分隔成数组，与join()效果相反；<br>  substring(start,stop);截取字符串<br>  substr(start,length);截取字符串</p>
+<p>  判断数组类型方法：<br>  1、ES5: Array.isArray(obj)  ;<br>  2、obj instanceof Array   ;<br>  3、Obiect.prototype.toString.call(obj)<br>    Object.prototype.toString.call(obj1) == ‘[object Array]’;</p>
 <p>参考链接：<a href="https://www.jianshu.com/p/fa212e29c7bf" target="_blank" rel="noopener">https://www.jianshu.com/p/fa212e29c7bf</a></p>
 
       
@@ -253,6 +256,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/03/js-跨域/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          js 跨域
+        
+      </div>
+    </a>
   
   
     <a href="/2019/03/js-原型-链-实例对象/" id="article-nav-older" class="article-nav-link-wrap">
