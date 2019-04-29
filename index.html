@@ -160,6 +160,70 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-js函数柯里化" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/js函数柯里化/">js函数柯里化</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/js函数柯里化/" class="archive-article-date">
+  	<time datetime="2019-04-29T01:29:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>  柯里化（currying），又称为部分求值，是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回一个新的函数的技术，新函数接受余下参数并返回运算结果；<br>  1.经典例子，实现累加 add(1)(2)(3)(4);<br>  第一种方法即是使用回调嵌套，<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function add(a)&#123;</span><br><span class="line">  //多层回调</span><br><span class="line">  return function(b)&#123;</span><br><span class="line">    return function(c)&#123;</span><br><span class="line">      return function(d)&#123;</span><br><span class="line">        //return a+b+c+d;</span><br><span class="line">        //或者使用reduce求和</span><br><span class="line">        return [a,b,c,d].reduce(function(pre,next)&#123;</span><br><span class="line">          return pre+next;</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">console.log(add(1)(2)(3)(4));  //10</span><br></pre></td></tr></table></figure></p>
+<p>  但是法一既不优雅也不好扩展，可以修改几下，让他支持不定的参数数量<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function add()&#123;</span><br><span class="line">  var args=[].slice.call(arguments);  //转化为数组,以便于使用数组方法</span><br><span class="line">  //用以存储更新参数数组</span><br><span class="line">  function adder()&#123;</span><br><span class="line">    var arg = [].slice.call(arguments);</span><br><span class="line">    args = args.concat(arg);  //连接参数，数组的concat方法</span><br><span class="line">    //每次调用，都返回自身，取值时可以通过内部的toString取到值</span><br><span class="line">    return adder;</span><br><span class="line">  &#125;</span><br><span class="line">  //（重写）指定toString 的值，用以隐式取值计算</span><br><span class="line">  adder.toString = function()&#123;</span><br><span class="line">    return args.reduce(function(pre,next)&#123;</span><br><span class="line">      return pre+next</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  return adder;</span><br><span class="line">&#125;</span><br><span class="line">console.log(add(1,2),add(1,2)(3),add(1)(2)(3)(4)); //3 6 10</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/js函数柯里化/">展开全部 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-js-跨域" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -272,8 +336,9 @@ Push Cache    http2的服务端推送
 <p>  判断数组类型方法：<br>  1、ES5: Array.isArray(obj)  ;<br>  2、obj instanceof Array   ;<br>  3、Obiect.prototype.toString.call(obj)<br>    Object.prototype.toString.call(obj1) == ‘[object Array]’;</p>
 <p>参考链接：<a href="https://www.jianshu.com/p/fa212e29c7bf" target="_blank" rel="noopener">https://www.jianshu.com/p/fa212e29c7bf</a></p>
 <p>  快速排序,我们先来看看阮一峰前辈的实现，比较容易理解原理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">var quickSort = function(arr) &#123;</span><br><span class="line">        //终止递归的条件</span><br><span class="line">   　　if (arr.length &lt;= 1) &#123; return arr; &#125;</span><br><span class="line">       //取得参照数</span><br><span class="line">   　　var pivotIndex = Math.floor(arr.length / 2);</span><br><span class="line">   　　var pivot = arr.splice(pivotIndex, 1)[0];</span><br><span class="line">   　　var left = [];</span><br><span class="line">   　　var right = [];</span><br><span class="line">   　　for (var i = 0; i &lt; arr.length; i++)&#123;</span><br><span class="line">       //比参照数小的放在left数组</span><br><span class="line">   　　　　if (arr[i] &lt; pivot) &#123;</span><br><span class="line">   　　　　　　left.push(arr[i]);</span><br><span class="line">   　　　　&#125; else &#123;</span><br><span class="line">       //大于等于参照数的放在right数组</span><br><span class="line">   　　　　　　right.push(arr[i]);</span><br><span class="line">   　　　　&#125;</span><br><span class="line">   　　&#125;</span><br><span class="line">     /*</span><br><span class="line">         递归处理</span><br><span class="line">         处理左边的数组left   参照数   处理右边的数组right  =&gt;生成一个新数组</span><br><span class="line">          </span><br><span class="line">     */</span><br><span class="line">   　　return quickSort(left).concat([pivot], quickSort(right));</span><br><span class="line">   &#125;;</span><br></pre></td></tr></table></figure></p>
-<pre><code>冒泡排序：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+<pre><code>冒泡排序：原理，从第一个元素开始，把开始元素和下个索引元素进行比较；如果当前元素大，就交换位置，重复操作直到比较到最后一个元素；那么此时最后一个元素就是该数组中最大的数（第一轮）；下一轮重复以上操作，但是此时最后一个元素已经是最大数了，所以不需要再比较最后一个元素，只需要比较到length-1-i 的位置（此处也是一个优化点）；
+该算法的时间复杂度是O(n*n)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">通用函数</span><br><span class="line">function checkArray(array)&#123;</span><br><span class="line">    return Array.isArray(array);</span><br><span class="line">&#125;</span><br><span class="line">function swap(array, left, right)&#123;</span><br><span class="line">    let rightValue = array[right];</span><br><span class="line">    array[right] = array[left];</span><br><span class="line">    array[left] = rightValue;</span><br><span class="line">&#125;</span><br><span class="line">冒泡</span><br><span class="line">function bubble(array)&#123;</span><br><span class="line">    checkArray(array);</span><br><span class="line">    let len = array.length;</span><br><span class="line">    for(let i=0; i&lt;len; i++)&#123;</span><br><span class="line">        //从0到len-1 - i 的遍历</span><br><span class="line">        for(let j=0;j&lt;len-1-i;j++)&#123;</span><br><span class="line">            if(array[j] &gt; array[j+1])&#123;</span><br><span class="line">                swap(array,j,j+1);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return array;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </code></pre>
       
 
